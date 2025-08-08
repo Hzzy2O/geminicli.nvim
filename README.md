@@ -29,9 +29,8 @@ Example with Lazy.nvim:
       split_side = "right",    -- "right" | "left" | "bottom" | "top"
       split_width_percentage = 0.30,
       split_height_percentage = 0.30,
-      -- Startup command (string or list)
+      -- Startup command
       -- terminal_cmd = "gemini --yolo",
-      -- terminal_cmd = { "gemini", "--yolo" },
     },
 
     -- Logging
@@ -53,9 +52,7 @@ You can also use your preferred plugin manager; just replicate the `keys` mappin
 See `example-keymaps.lua` in the repo for a full example.
 
 ## Configuration
-- **terminal.terminal_cmd**: startup command for the embedded terminal. Accepts:
-  - string, e.g. `"gemini --yolo"`
-  - list, e.g. `{ "gemini", "--yolo" }`
+- **terminal.terminal_cmd**: startup command for the embedded terminal. Accepts a string, e.g. `"gemini --yolo"`.
 
 Defaults to `"gemini"`.
 

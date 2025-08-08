@@ -16,7 +16,7 @@ local terminal_instance = nil
 
 --- Open a snacks terminal (show window)
 ---@param config table Terminal configuration
----@param gemini_cmd string|table Gemini startup command (string or list)
+---@param gemini_cmd string Gemini startup command
 ---@return SnacksTerminal terminal
 function M.open(config, gemini_cmd)
   local ok, snacks = pcall(require, "snacks")
@@ -41,12 +41,8 @@ function M.open(config, gemini_cmd)
 
   -- Build command
   local cmd = gemini_cmd or "gemini"
-  -- If cmd is a list, try to check the first executable (best effort)
-  if type(cmd) == "table" and #cmd > 0 then
-    local exe = cmd[1]
-    if type(exe) == "string" and exe ~= "" and vim.fn.executable(exe) == 0 then
-      cmd = { "bash", "-c", "echo 'Warning: gemini command not found. Please install Gemini CLI first.'; exec bash" }
-    end
+  if vim.fn.executable(cmd:match("^%S+")) == 0 then
+    cmd = "bash -c 'echo \"Warning: gemini command not found. Please install Gemini CLI first.\"; exec bash'"
   end
 
   self.terminal = snacks.terminal.toggle(cmd, {
@@ -63,7 +59,7 @@ end
 
 --- Get or create terminal without showing window
 ---@param config table Terminal configuration
----@param gemini_cmd string|table Gemini startup command (string or list)
+---@param gemini_cmd string Gemini startup command
 ---@return SnacksTerminal terminal
 function M.get_or_create(config, gemini_cmd)
   local ok, snacks = pcall(require, "snacks")
@@ -90,11 +86,8 @@ function M.get_or_create(config, gemini_cmd)
 
     -- Create terminal with explicit command
     local cmd = gemini_cmd or "gemini"
-    if type(cmd) == "table" and #cmd > 0 then
-      local exe = cmd[1]
-      if type(exe) == "string" and exe ~= "" and vim.fn.executable(exe) == 0 then
-        cmd = { "bash", "-c", "echo 'Warning: gemini command not found. Please install Gemini CLI first.'; exec bash" }
-      end
+    if vim.fn.executable(cmd:match("^%S+")) == 0 then
+      cmd = "bash -c 'echo \"Warning: gemini command not found. Please install Gemini CLI first.\"; exec bash'"
     end
 
     self.terminal = snacks.terminal(cmd, {

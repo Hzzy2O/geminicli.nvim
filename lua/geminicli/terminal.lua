@@ -7,7 +7,7 @@ local M = {}
 
 --- Open a terminal with Gemini CLI
 ---@param config table Terminal configuration
----@param gemini_cmd string|table Gemini startup command (string or list)
+---@param gemini_cmd string Gemini startup command
 ---@return table terminal Terminal handle
 function M.open(config, gemini_cmd)
   local provider = config.provider

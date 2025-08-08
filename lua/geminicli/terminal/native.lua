@@ -15,7 +15,7 @@ NativeTerminal.__index = NativeTerminal
 
 --- Open a native terminal
 ---@param config table Terminal configuration
----@param gemini_cmd string|table Gemini startup command (string or list)
+---@param gemini_cmd string Gemini startup command
 ---@return NativeTerminal terminal
 function M.open(config, gemini_cmd)
   local self = setmetatable({}, NativeTerminal)
@@ -46,8 +46,8 @@ function M.open(config, gemini_cmd)
   vim.api.nvim_set_current_buf(self.bufnr)
 
   -- Start terminal with Gemini CLI
-  local cmd = gemini_cmd or "gemini"
-  self.job_id = vim.fn.termopen(cmd, {
+  local cmd_parts = vim.split(gemini_cmd or "gemini", " ")
+  self.job_id = vim.fn.termopen(cmd_parts, {
     on_exit = function(job_id, exit_code, event_type)
       -- Clean up when terminal exits
       if self.bufnr and vim.api.nvim_buf_is_valid(self.bufnr) then
