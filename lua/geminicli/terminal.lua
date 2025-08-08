@@ -7,8 +7,9 @@ local M = {}
 
 --- Open a terminal with Gemini CLI
 ---@param config table Terminal configuration
+---@param gemini_cmd string|table Gemini startup command (string or list)
 ---@return table terminal Terminal handle
-function M.open(config)
+function M.open(config, gemini_cmd)
   local provider = config.provider
 
   -- Auto-detect provider
@@ -27,7 +28,7 @@ function M.open(config)
     terminal_provider = require("geminicli.terminal.native")
   end
 
-  return terminal_provider.open(config)
+  return terminal_provider.open(config, gemini_cmd)
 end
 
 --- Close a terminal

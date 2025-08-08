@@ -68,6 +68,13 @@ function M._register_commands()
       opts = { desc = "Close Gemini CLI terminal" },
     },
     {
+      name = "GeminiQuit",
+      callback = function()
+        M.close_terminal()
+      end,
+      opts = { desc = "Quit Gemini CLI terminal (alias of GeminiClose)" },
+    },
+    {
       name = "GeminiSend",
       callback = function(opts)
         M.send(opts)
@@ -111,7 +118,7 @@ function M.open_terminal()
     M.state.terminal:focus()
   else
     -- Create and show terminal
-    M.state.terminal = terminal.open(M.state.config.terminal)
+    M.state.terminal = terminal.open(M.state.config.terminal, M.state.config.terminal.terminal_cmd)
   end
 end
 
@@ -181,7 +188,7 @@ function M._ensure_terminal()
     -- Terminal doesn't exist or is invalid, get or create one (without showing)
     logger.debug("Getting or creating terminal...")
     local snacks_terminal = require("geminicli.terminal.snacks")
-    M.state.terminal = snacks_terminal.get_or_create(M.state.config.terminal)
+    M.state.terminal = snacks_terminal.get_or_create(M.state.config.terminal, M.state.config.terminal.terminal_cmd)
   end
 end
 

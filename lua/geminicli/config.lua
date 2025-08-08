@@ -18,6 +18,9 @@ M.defaults = {
     split_width_percentage = 0.30,
     -- Terminal height percentage (for horizontal splits)
     split_height_percentage = 0.30,
+    -- Startup command for Gemini CLI. String or list.
+    -- Examples: "gemini", "gemini --yolo", { "gemini", "--yolo" }
+    terminal_cmd = "gemini",
   },
 
   -- Logging settings
@@ -76,6 +79,25 @@ local function validate_config(config)
   local valid_levels = { "debug", "info", "warn", "error" }
   if not vim.tbl_contains(valid_levels, config.log.level) then
     return false, "Invalid log level: " .. config.log.level
+  end
+
+  -- Validate terminal_cmd: allow string (non-empty) or list of strings (non-empty)
+  local cmd = config.terminal and config.terminal.terminal_cmd
+  if type(cmd) == "string" then
+    if cmd == "" then
+      return false, "terminal.terminal_cmd string must not be empty"
+    end
+  elseif type(cmd) == "table" then
+    if #cmd == 0 then
+      return false, "terminal.terminal_cmd list must not be empty"
+    end
+    for i, v in ipairs(cmd) do
+      if type(v) ~= "string" or v == "" then
+        return false, string.format("terminal.terminal_cmd[%d] must be a non-empty string", i)
+      end
+    end
+  else
+    return false, "terminal.terminal_cmd must be a string or a list of strings"
   end
 
   return true

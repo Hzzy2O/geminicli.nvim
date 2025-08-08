@@ -15,8 +15,9 @@ NativeTerminal.__index = NativeTerminal
 
 --- Open a native terminal
 ---@param config table Terminal configuration
+---@param gemini_cmd string|table Gemini startup command (string or list)
 ---@return NativeTerminal terminal
-function M.open(config)
+function M.open(config, gemini_cmd)
   local self = setmetatable({}, NativeTerminal)
 
   -- Calculate split size
@@ -45,7 +46,7 @@ function M.open(config)
   vim.api.nvim_set_current_buf(self.bufnr)
 
   -- Start terminal with Gemini CLI
-  local cmd = "gemini"
+  local cmd = gemini_cmd or "gemini"
   self.job_id = vim.fn.termopen(cmd, {
     on_exit = function(job_id, exit_code, event_type)
       -- Clean up when terminal exits
